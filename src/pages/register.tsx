@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 
 import { useForm } from "react-hook-form"
 import { signIn, useSession } from 'next-auth/react'
@@ -9,10 +9,8 @@ import { toast } from 'react-toastify'
 import { getError } from '@/utils/getError'
 
 import { useRouter } from 'next/router'
-import { BirthdayPicker } from 'react-birthday-picker'
 
-
-const register = () => {
+const register:React.FC = () => {
   const { register, handleSubmit, getValues, formState: { errors } } = useForm();
   
   const router = useRouter();
@@ -37,6 +35,7 @@ const register = () => {
     birthday,
     descritpion,
     goodFoot,
+    avatar,
     position,
     address,
     contact,
@@ -49,6 +48,7 @@ const register = () => {
         password,
         width,
         weight,
+        avatar: preview,
         age,
         name,
         birthday,
@@ -78,7 +78,18 @@ const register = () => {
     }
   }
 
-
+  const [preview, setPreview] = useState<any | null>(null);
+  const handleSetAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const { files } = event.target;
+    
+    if(!files) {
+      return
+    }
+    
+    const previewURL = URL.createObjectURL(files[0]);
+    setPreview(previewURL);
+  }
   return (
     <div className='mx-20'>
       <h1 className='mt-5 ufc__font text-2xl'>
@@ -369,6 +380,7 @@ const register = () => {
               required
               {...register('birthday', {
                 required: 'Please enter birthday',
+                pattern: /^(?:0[1-9]|[12]\d|3[01])([\/.-])(?:0[1-9]|1[012])\1(?:19|20)\d\d$/
               })}
             />
             {errors.birthday && (
@@ -415,7 +427,7 @@ const register = () => {
               Sua posiçao
             </label>
             <input 
-              type="position" 
+              type="text" 
               // name="position" 
               id="position" 
               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -439,7 +451,7 @@ const register = () => {
               contato
             </label>
             <input 
-              type="contact" 
+              type="text" 
               // name="contact" 
               id="contact" 
               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -447,11 +459,43 @@ const register = () => {
               required
               {...register('contact', {
                 required: 'Please enter contact',
+                pattern: /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/
               })}
             />
             {errors.contact && (
               //@ts-ignore
               <div className="text-red-500">{errors.contact.message}</div>
+            )}
+          </div>
+          {/* avatar upload */}
+          <div className='w-full'>
+            <label 
+              htmlFor="avatar" 
+              className="block mb-2 text-sm font-medium text-gray-900 mt-5 ufc__font"
+            >
+              upload avatar
+            </label>
+            <div className='flex items-center'>
+              <img
+                className='aspect-square border-2 border-gray-200 mx-4 w-[100px] rounded-full' 
+                src={preview || ""} 
+                alt="avatar" 
+              />
+              <input 
+                type="file"
+                accept='image/*'
+                onChange={(event) => handleSetAvatar(event)}
+                id="avatar" 
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+                // {...register('avatar', {
+                //   required: 'Please upload image avatar',
+                // })}
+              />
+            </div>
+            {errors.avatar && (
+              //@ts-ignore
+              <div className="text-red-500">{errors.avatar.message}</div>
             )}
           </div>
         </div>

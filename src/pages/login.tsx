@@ -11,7 +11,7 @@ import { getError } from '@/utils/getError'
 import { useRouter } from 'next/router'
 
 import Image from 'next/image'
-import imageLogo from '../assets/mma.jpg'
+import imageLogo from '../assets/mma.png'
 
 const login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -21,8 +21,6 @@ const login = () => {
 
   const handleSignIn = async ({ email, password }:any) => {
     try {
-      console.log(email,password,'credentials');
-
       const result: any = await signIn('credentials', {
         redirect: false,
         email,
@@ -107,7 +105,7 @@ const login = () => {
         </button>
 
         <div className="my-8 border-b text-center">
-          <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
+          <div className="leading-none px-2 inline-block text-sm text-gray-300 tracking-wide font-medium transform translate-y-1/2">
             <Link href={"/register"}>
               <p>Não possui uma conta?</p>
             </Link>
@@ -129,7 +127,7 @@ const login = () => {
             </p>
           </span>
         </Link>
-        <p className="mt-4 text-xs text-gray-600 text-center">
+        <p className="mt-4 text-xs text-gray-200 text-center">
           Eu concordo com agym a cerca dos
           <Link href="#" className="ml-1 border-b border-gray-500 border-dotted">
             Termos de serviço

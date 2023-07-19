@@ -1,37 +1,36 @@
-import { signOut } from "next-auth/react"
-import { useEffect } from "react"
-import axios from 'axios'
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/router"
-import Header from "@/components/Header"
-import { GetServerSideProps } from "next"
-import { toast } from "react-toastify"
-import { getError } from "@/utils/getError"
-import Link from "next/link"
-// import bgFernando from "../assets/fernando.png"
+import { useEffect, useState } from "react"
 
+import axios from 'axios'
+
+import { useSession } from "next-auth/react"
+
+import { useRouter } from "next/router"
+
+import Header from "@/components/Header"
+
+import { GetServerSideProps } from "next"
+
+import { toast } from "react-toastify"
+
+import { getError } from "@/utils/getError"
+
+import Link from "next/link"
+import PLAYERIMG from '../assets/player.png';
+import Image from "next/image"
 
 export const getServerSideProps:GetServerSideProps = async (ctx: any) => {
   let players;
-  const data:any = await axios.get("http://localhost:3000/api/players")
+  await axios.get(`${process.env.REACT_API_URL}/api/players/players`)
     .then((res) => { 
-      console.log(res.data,'response'),
       players = res.data?.data, 
       Promise.resolve(res.data);
 
       toast.success("Sucesso ao pegar os dados")
     }).catch((error: Error) => {
-      console.log(error, 'erro'), 
       Promise.reject(error),
       toast.error(getError(error.message)
     )
   });
-
-  if(data) {
-    console.log(data.data,'data');
-  } else {
-    console.log("erro")
-  }
   
   return {
     props: {
@@ -47,26 +46,16 @@ export default function Home(props: any) {
   const { redirect }: any = router.query;
 
   useEffect(() => {
-    if(props) {
-      console.log(props,'props get server side rendering');
-    } else {
-      console.log("props dosent exist");
-    }
-  },[props])
-
-  useEffect(() => {
     if(!session?.user) {
-      router.push(redirect || `/login?redirect=${redirect || "/"}`);    
-    } else {
-      console.log(session,'session');
+      router.push(redirect || "/login");
     }
-  },[redirect, router, session])
+  },[session, redirect, router]);
 
   return (
    <main className="">
     <Header />
 
-    <div className="flex-1 flex-col justify-center items-center flex bg-[url('../assets/bg.jpeg')] bg-no-repeat bg-cover h-[100vh] w-[100%]">
+    {/* <div className="flex-1 flex-col justify-center items-center flex bg-[url('../assets/bg.jpeg')] bg-no-repeat bg-cover h-[100vh] w-[100%]">
       <div className="flex top-28 font-bold bg-transparent ufc__font tracking-widest flex-col space-y-12 flex-1 justify-center items-center">
         <h1 className="text-8xl uppercase font-extrabold text-yellow-500 text-center">
           MMA SOCCER
@@ -90,29 +79,74 @@ export default function Home(props: any) {
         </h5>
       </div>
 
-    </div>
+    </div> */}
 
-    <div className="flex container justify-center mx-auto flex-col my-24">
-      <p className="text-center font-bold ufc_font">
-        MMA MEMBROS
-      </p>
-      <div className="flex space-y-6 flex-col mt-10 mx-10 max-w-8xl ">
-        {props?.players?.map((i: any) => (
-          <div className="flex-1 bg-white border-2 border-gray-100 rounded-md items-center shadow-xl p-4 flex justify-around">
-            <div className="flex flex-col space-y-4 ufc__font">
-              <span>{i?.fullName || ""}</span>
-              <span>nome</span>
+    <div className="flex justify-center mx-auto flex-col h-full my-24 lg:mx-40 sm:mx-24">
+
+      <div className="flex items-center w-full justify-between">
+        
+        <div className="flex flex-nowrap space-x-2 items-center">
+          <button className="flex p-2 bg-gray-100 opacity-60 hover:bg-white hover:text-blue-600 hover:opacity-100 rounded-full">
+            <p className="uppercase mx-2">
+              players
+            </p>
+          </button>
+          <button className="flex p-2 bg-gray-100 opacity-60 hover:bg-white hover:text-blue-600 hover:opacity-100 rounded-full">
+            <p className="uppercase mx-2">
+              management
+            </p>
+          </button>
+        </div>
+
+        <div className="d-flex justify-between space-x-4 space-y-2">
+          {["attack", "goleiro","defesa","lateral"].map(i => (
+            <button className="p-2 bg-gray-100 opacity-60 hover:opacity-100 hover:bg-white hover:text-blue-600 rounded-full">
+              <p className="uppercase mx-2">
+                { i }
+              </p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex space-x-2 flex-row mt-10 max-w-8xl overflow-x-auto px-10 h-[600px] flex-nowrap">
+        <div className="flex transition-all items-center justify-center">
+          {props?.players?.map((i: any, idx: number) => props?.players ? (
+            <div 
+              key={i._id} 
+              className={`flex-1 bg-no-repeat w-[400px] h-[470px] hover:scale-110 transition-all object-fill bg-[url('../assets/cardbg.png')] flex-col items-center flex justify-around`}
+              style={{ backgroundPositionX: '-105px'}}
+            >
+              <span className="p-5 bg-blue-300 rounded-full relative top-[8.2em] shadow-full left-5 z-2">
+                <p className="uppercase z-[10] font-bold text-6xl relative text-white">
+                  10
+                </p>
+              </span>
+
+              <Link href={`/player/${i._id}`} className="z-1" tabIndex={-1} aria-checked={false}>
+                <Image 
+                  src={PLAYERIMG} 
+                  className="h-full w-full bottom-[6em] right-3 relative" 
+                  width={250}
+                  alt="player"
+                />
+              </Link>
+              <div className="flex flex-col space-y-4 text-white ufc__font relative bottom-[9em] right-[2em]">
+                {i.name ? (
+                  <p className="text-5xl text-center">
+                    { i.name }
+                  </p>
+                ) : (
+                  <p className="text-5xl text-center"> 
+                    { i.fullName } 
+                  </p>
+                ) }
+              </div>
             </div>
-            <Link href={`/player/${i._id}`}>
-              <img src="http://github.com/omanramalho42.png" className="h-28 w-28 rounded-full shadow-md" width={52}></img>
-            </Link>
-            <div className="flex flex-col space-y-2 items-start ufc__font">
-              <p><strong>Nome: </strong>{ i.fullName }</p>
-              <p>Apelido</p>
-              <strong>Ultimo jogo: </strong>
-            </div>
-          </div>
-        ))}
+          ) : (
+            <p>Nenhum jogador encontrado... </p>
+          ))}
+        </div>
       </div>
     </div>
    </main>

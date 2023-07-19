@@ -1,6 +1,6 @@
 import { Schema, model, models } from 'mongoose'
 
-const UserSchema = new Schema({
+const PlayerSchema = new Schema({
   email: {
     type: String,
     unique: true,
@@ -16,19 +16,6 @@ const UserSchema = new Schema({
   password: {
     type:String,
     required: [true, "A senha é requerida"],
-  },
-  isAdmin: {
-    type: Boolean,
-    default: false
-  },
-  plan: {
-    type: String,
-    // required: [true, "O plano de assinatura do jogador é requerido"],
-    default: "avulso"
-  },
-  age: {
-    type: Number,
-    required: [true, "A idade é requerida"],
   },
   weight: {
     type: Number,
@@ -76,4 +63,4 @@ const UserSchema = new Schema({
   }
 });
 
-export const User = models.User || model("User", UserSchema);
+export const Player = models.Player || model("Player", PlayerSchema);

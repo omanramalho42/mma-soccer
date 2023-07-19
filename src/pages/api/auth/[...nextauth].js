@@ -42,6 +42,7 @@ export default NextAuth({
             fullName: user.fullName,
             email: user.email,
             isAdmin: user.isAdmin,
+            avatar: user?.avatar,
             plan: user.plan
           };
         }

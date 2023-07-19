@@ -8,7 +8,18 @@
   font-family: url('/fonts/Sternbach.ttf');
 }
 
+body {
+  background: radial-gradient(#347bff, #3f16af);
+}
+
 .ufc__font {
   font-family: 'Sternbach', sans-serif;
   /* font-family: 'Sternbach Hollow', sans-serif; */
+}
+
+.bg__squad {
+  background-image: url('../assets/field.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }

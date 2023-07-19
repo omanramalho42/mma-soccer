@@ -9,12 +9,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const filter = {}
   const players = await User.find(filter)
 
-  console.log(players,'players');
-  
   return res.status(201).send({ 
     success: true,
     data: players 
   });
 }
 
-export default handler
+export default handler;

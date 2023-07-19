@@ -22,6 +22,7 @@ const handler = async (
   await db.connect()
 
   if(req.method === "POST") {
+    
     if(!req.body) return res.status(400).json({ error: "informaçoes faltando" })
 
     const { 
@@ -39,8 +40,11 @@ const handler = async (
       position,
       address,
       contact,
-      description 
+      description,
+      avatar 
     } = req.body
+
+    console.log(req.body,'info register new user');
 
     const userExists = await User.findOne({ email });
 
@@ -67,11 +71,12 @@ const handler = async (
         age: Number(age),
         name,
         birthday,
-        goodFood: goodFoot,
+        goodFoot,
         positionPlayer: position,
         address,
         phone: contact,
-        description
+        description,
+        avatar
       });
     
       const user = await newUser.save();
