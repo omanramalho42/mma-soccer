@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let teams: any[] = [];
-  await axios.get(`${process.env.REACT_API_URL}/api/team/teams`)
+  await axios.get(`${window.location.href}/api/team/teams`)
   .then((res) => (
     teams.push(res.data.json())
   )).catch(error => toast.error(error.message))

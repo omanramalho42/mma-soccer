@@ -20,7 +20,7 @@ import Image from "next/image"
 
 export const getServerSideProps:GetServerSideProps = async (ctx: any) => {
   let players;
-  await axios.get(`${process.env.REACT_API_URL}/api/players/players`)
+  await axios.get(`${window.location.href}/api/players/players`)
     .then((res) => { 
       players = res.data?.data, 
       Promise.resolve(res.data);

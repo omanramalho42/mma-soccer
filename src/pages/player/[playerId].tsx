@@ -11,7 +11,7 @@ import Header from '@/components/Header'
 
 export const getServerSideProps:GetServerSideProps = async (ctx: any) => {
   let player;
-  const data:any = await axios.get(`${process.env.REACT_API_URL}/api/players/player?playerId=${ctx.query.playerId}`)
+  const data:any = await axios.get(`${window.location.href}/api/players/player?playerId=${ctx.query.playerId}`)
     .then((res) => { 
       console.log(res.data.data,'response'),
       player = res.data.data 

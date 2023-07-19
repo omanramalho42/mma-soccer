@@ -13,7 +13,7 @@ import Header from '@/components/Header'
 
 export const getServerSideProps:GetServerSideProps = async (ctx: any) => {
   let news;
-  await axios.get("http://localhost:3000/api/news/news")
+  await axios.get(`${window.location.href}/api/news/news`)
     .then((res) => { 
       news = res.data?.data, 
       Promise.resolve(res.data);

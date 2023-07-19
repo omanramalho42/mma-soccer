@@ -10,7 +10,7 @@ import { useSession } from 'next-auth/react';
 
 export const getServerSideProps:GetServerSideProps = async (ctx: any) => {
   let players;
-  const data:any = await axios.get(`${process.env.REACT_API_URL}/api/players/players`)
+  const data:any = await axios.get(`${window.location.href}/api/players/players`)
     .then((res) => { 
       console.log(res.data,'response'),
       players = res.data?.data, 
