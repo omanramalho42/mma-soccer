@@ -17,7 +17,7 @@ const Teams:NextPage = () => {
 
   const [teams,setTeams] = useState<null | any>(null);
   const fetchTeams = async () => {
-    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/team/teams`)
+    await axios.get(`${process.env.API_URL}/api/team/teams`)
       .then((res) => (
         setTeams(res.data.json())
       )).catch(error => toast.error(error.message))

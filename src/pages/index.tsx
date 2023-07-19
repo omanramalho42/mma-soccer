@@ -49,7 +49,7 @@ export default function Home(props: any) {
   const[loading,setLoading] = useState(true);
 
   const fetchDataPlayers = async () => {
-    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/players/players`)
+    await axios.get(`${process.env.API_URL}/api/players/players`)
     .then((res) => { 
       setPlayers(res.data?.data);
       Promise.resolve(res.data);
