@@ -17,24 +17,7 @@ import Link from "next/link"
 import PLAYERIMG from '../assets/player.png';
 import Image from "next/image"
 
-interface Props {
-  currentApiUrl: string;
-}
-
-export const getServerSideProps:GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  let players;
-
-  
-  
-  return {
-    props: {
-      players: players ? players : null,
-      message: "success!"
-    }
-  }
-}
-
-export default function Home(props: any) {
+export default function Home() {
   const { data: session } = useSession();
   const router = useRouter();
   const { redirect }: any = router.query;
@@ -49,7 +32,7 @@ export default function Home(props: any) {
   const[loading,setLoading] = useState(true);
 
   const fetchDataPlayers = async () => {
-    await axios.get(`${process.env.API_URL}/api/players/players`)
+    await axios.get(`/api/players/players`)
     .then((res) => { 
       setPlayers(res.data?.data);
       Promise.resolve(res.data);
@@ -66,6 +49,8 @@ export default function Home(props: any) {
   useEffect(() => {
     fetchDataPlayers();
   },[]);
+
+  useEffect(() => { console.log(players,'players') },[players])
 
   return (
    <main className="">
@@ -116,7 +101,7 @@ export default function Home(props: any) {
 
         <div className="d-flex justify-between space-x-4 space-y-2">
           {["attack", "goleiro","defesa","lateral"].map(i => (
-            <button className="p-2 bg-gray-100 opacity-60 hover:opacity-100 hover:bg-white hover:text-blue-600 rounded-full">
+            <button key={i} className="p-2 bg-gray-100 opacity-60 hover:opacity-100 hover:bg-white hover:text-blue-600 rounded-full">
               <p className="uppercase mx-2">
                 { i }
               </p>
