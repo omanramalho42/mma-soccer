@@ -13,7 +13,7 @@ import Header from '@/components/Header'
 
 export const getServerSideProps:GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
   let news;
-  await axios.get(`https://mma-soccer.vercel.app//api/news/news`)
+  await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/news/news`)
     .then((res) => { 
       news = res.data?.data, 
       Promise.resolve(res.data);

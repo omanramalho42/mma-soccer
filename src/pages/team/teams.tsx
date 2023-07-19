@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let teams: any[] = [];
-  await axios.get(`https://mma-soccer.vercel.app/api/team/teams`)
+  await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/team/teams`)
   .then((res) => (
     teams.push(res.data.json())
   )).catch(error => toast.error(error.message))
