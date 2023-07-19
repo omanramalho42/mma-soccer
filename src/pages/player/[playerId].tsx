@@ -11,7 +11,7 @@ import Header from '@/components/Header'
 
 export const getServerSideProps:GetServerSideProps = async (ctx: any) => {
   let player;
-  const data:any = await axios.get(`http://localhost:3000/api/players/player?playerId=${ctx.query.playerId}`)
+  const data:any = await axios.get(`https://mma-soccer.vercel.app/api/players/player?playerId=${ctx.query.playerId}`)
     .then((res) => { 
       console.log(res.data.data,'response'),
       player = res.data.data 

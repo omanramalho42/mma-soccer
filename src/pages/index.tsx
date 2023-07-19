@@ -24,7 +24,7 @@ interface Props {
 export const getServerSideProps:GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
   let players;
 
-  await axios.get(`http://localhost:3000/api/players/players`)
+  await axios.get(`https://mma-soccer.vercel.app//api/players/players`)
     .then((res) => { 
       players = res.data?.data, 
       Promise.resolve(res.data);
