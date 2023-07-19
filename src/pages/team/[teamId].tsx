@@ -4,8 +4,6 @@ import React from 'react'
 const teamId = () => {
   const { query: { teamId } } = useRouter()
   
-
-  
   return (
     <div>
       # { teamId }
@@ -13,4 +11,4 @@ const teamId = () => {
   )
 }
 
-export default [teamId]
+export default teamId;
