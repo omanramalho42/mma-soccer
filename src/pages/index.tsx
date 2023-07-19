@@ -40,7 +40,7 @@ export default function Home() {
       toast.success("Sucesso ao pegar os dados");
       setLoading(false);
     }).catch((error: Error) => {
-      Promise.reject(error),
+      // Promise.reject(error),
       setLoading(true),
       toast.error(getError(error.message),
     )});
