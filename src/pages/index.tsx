@@ -24,17 +24,7 @@ interface Props {
 export const getServerSideProps:GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
   let players;
 
-  await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/players/players`)
-    .then((res) => { 
-      players = res.data?.data, 
-      Promise.resolve(res.data);
-
-      toast.success("Sucesso ao pegar os dados")
-    }).catch((error: Error) => {
-      Promise.reject(error),
-      toast.error(getError(error.message)
-    )
-  });
+  
   
   return {
     props: {
@@ -55,7 +45,27 @@ export default function Home(props: any) {
     }
   },[session, redirect, router]);
 
-  console.log(process.env.NEXTAUTH_URL,'next url api');
+  const[players,setPlayers] = useState<any | null>(null);
+  const[loading,setLoading] = useState(true);
+
+  const fetchDataPlayers = async () => {
+    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/players/players`)
+    .then((res) => { 
+      setPlayers(res.data?.data);
+      Promise.resolve(res.data);
+      
+      toast.success("Sucesso ao pegar os dados");
+      setLoading(false);
+    }).catch((error: Error) => {
+      Promise.reject(error),
+      setLoading(true),
+      toast.error(getError(error.message),
+    )});
+  }
+
+  useEffect(() => {
+    fetchDataPlayers();
+  },[]);
 
   return (
    <main className="">
@@ -117,7 +127,7 @@ export default function Home(props: any) {
 
       <div className="flex space-x-2 flex-row mt-10 max-w-8xl overflow-x-auto px-10 h-[600px] flex-nowrap">
         <div className="flex transition-all items-center justify-center">
-          {props?.players?.map((i: any, idx: number) => props?.players ? (
+          {players?.map((i: any, idx: number) => players ? (
             <div 
               key={i._id} 
               className={`flex-1 bg-no-repeat w-[400px] h-[470px] hover:scale-110 transition-all object-fill bg-[url('../assets/cardbg.png')] flex-col items-center flex justify-around`}

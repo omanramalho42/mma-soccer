@@ -1,25 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { GetServerSideProps, NextPage } from 'next'
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  let teams: any[] = [];
-  await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/team/teams`)
-  .then((res) => (
-    teams.push(res.data.json())
-  )).catch(error => toast.error(error.message))
-
-  return {
-    props: {
-      teams
-    }
-  }
-}
-
-const Teams:NextPage = ({ teams }: any) => {
+const Teams:NextPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -29,11 +15,17 @@ const Teams:NextPage = ({ teams }: any) => {
     }
   },[session, router]);
 
+  const [teams,setTeams] = useState<null | any>(null);
+  const fetchTeams = async () => {
+    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/team/teams`)
+      .then((res) => (
+        setTeams(res.data.json())
+      )).catch(error => toast.error(error.message))
+    
+  }
   useEffect(() => {
-    if(teams) {
-      console.log(teams,'teams');
-    }
-  },[teams])
+    fetchTeams();
+  },[router]);
 
   return (
     <div className='flex w-full justify-center'>

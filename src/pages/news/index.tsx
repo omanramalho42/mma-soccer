@@ -11,51 +11,38 @@ import { toast } from 'react-toastify'
 
 import Header from '@/components/Header'
 
-export const getServerSideProps:GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  let news;
-  await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/news/news`)
+const news = (props: any) => {
+  const { data: session } = useSession();
+  
+  const router = useRouter();
+  const { redirect }: any = router.query;
+
+  const[news, setNews] = useState<any | null>(null);
+  const [carousel, setCarousel] = useState<string[]>([]);
+
+  const fetchNews = async () => {
+    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/news/news`)
     .then((res) => { 
-      news = res.data?.data, 
+      setNews(res.data?.data), 
       Promise.resolve(res.data);
 
       toast.success("Sucesso ao pegar os dados")
     }).catch((error: Error) => {
       Promise.reject(error),
       toast.error(getError(error.message)
-    )
-  });
-  
-  return {
-    props: {
-      news: news ? news : null,
-      message: "success!"
-    }
+    )});
   }
-}
-
-const news = (props: any) => {
-  const { data: session } = useSession();
-  
-  const router = useRouter();
-  const { redirect }: any = router.query;
-  const[news, setNews] = useState<any | null>(null);
-  
-  const [carousel, setCarousel] = useState<string[]>([]);
 
   useEffect(() => {
-    if(props?.message.includes("success")) {
-      setNews(props.news);
-    }
-    if(props.news.carousel) {
+    fetchNews();
+
+    if(news) {
       setCarousel(
-        props.news.carousel?.map((img: any) => img)
+        news?.carousel?.map((img: any) => img)
       );
     }
-    // if(!session?.user) {
-    //   router.push(redirect || "/login");
-    // }
-  },[props, session, router, redirect]);
-  
+  },[session, router, redirect]);
+
   const [carouselIdx, setCarouselIdx] = useState(0);
   useEffect(() => {
     if(carouselIdx >= 4) {

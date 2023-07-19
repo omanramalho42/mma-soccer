@@ -1,5 +1,5 @@
 
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { GetServerSideProps } from 'next'
@@ -9,39 +9,27 @@ import { getError } from '@/utils/getError'
 import PLAYERIMG from '../../assets/player.png'
 import Header from '@/components/Header'
 
-export const getServerSideProps:GetServerSideProps = async (ctx: any) => {
-  let player;
-  const data:any = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/players/player?playerId=${ctx.query.playerId}`)
+const Player:FC<any> = (props) => {
+  const router = useRouter();
+  const { playerId } = router.query;
+
+  const [player,setPlayer] = useState<null | any>(null);
+  const fetchPlayerId = async () => {
+    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/players/player?playerId=${playerId}`)
     .then((res) => { 
-      console.log(res.data.data,'response'),
-      player = res.data.data 
+      setPlayer(res.data.data) 
       Promise.resolve(res.data);
 
       toast.success("Sucesso ao pegar os dados")
     }).catch((error: Error) => {
-      console.log(error, 'erro'), 
-      Promise.reject(error),
+      // Promise.reject(error),
       toast.error(getError(error.message)
-    )
-  });
-
-  if(player) {
-    console.log(player,'data');
-  } else {
-    console.log("erro")
+    )});
   }
-  
-  return {
-    props: {
-      player: player ? player : null,
-      message: "success!"
-    }
-  }
-}
 
-const Player:FC<any> = (props) => {
-  const router = useRouter();
-  const { playerId } = router.query;
+  useEffect(() => {
+    fetchPlayerId();
+  }, [router, playerId])
   
   return (
     <div className='flex-col'>
@@ -66,19 +54,19 @@ const Player:FC<any> = (props) => {
             
             <span className='p-2 rounded-md bg-blue-700'>
               <p className='uppercase mx-4 text-bold text-white'>
-                {props.player.positionPlayer}
+                {player?.positionPlayer}
               </p>
             </span>
 
             <h1 className='text-7xl text-white font-bold'>
-              {props.player.fullName}
+              {player?.fullName}
             </h1>
 
             <div className='flex flex-col mt-12 bg-[rgba(25,25,25,20%)] rounded-md p-12 w-full'>
               <div className='flex space-x-4 f-full justify-between'>
                 <div className='flex p-4 flex-col'>
                   <p className='text-5xl text-white text-bold'>
-                    {props.player.age}
+                    {player?.age}
                   </p>
                   <p className='text-gray-200'>
                     age
@@ -86,7 +74,7 @@ const Player:FC<any> = (props) => {
                 </div>
                 <div className='flex p-4 flex-col'>
                   <p className='text-5xl text-white text-bold'>
-                    {props.player.weight}
+                    {player?.weight}
                   </p>
                   <p className='text-gray-200'>
                     weight (kg)
@@ -94,7 +82,7 @@ const Player:FC<any> = (props) => {
                 </div>
                 <div className='flex p-4 flex-col'>
                   <p className='text-5xl text-white text-bold'>
-                    {props.player.width}
+                    {player?.width}
                   </p>
                   <p className='text-gray-200'>
                     width (cm)
@@ -118,7 +106,7 @@ const Player:FC<any> = (props) => {
           <Image 
             width={300} 
             height={800} 
-            className='w-full object-contain h-full' 
+            className='w-full object-contain h-full'
             alt='player' 
             src={PLAYERIMG} 
           />

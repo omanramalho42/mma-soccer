@@ -8,35 +8,6 @@ import { getError } from '@/utils/getError';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
-export const getServerSideProps:GetServerSideProps = async (ctx: any) => {
-  let players;
-  const data:any = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/players/players`)
-    .then((res) => { 
-      console.log(res.data,'response'),
-      players = res.data?.data, 
-      Promise.resolve(res.data);
-
-      toast.success("Sucesso ao pegar os dados")
-    }).catch((error: Error) => {
-      console.log(error, 'erro'), 
-      Promise.reject(error),
-      toast.error(getError(error.message)
-    )
-  });
-  if(data) {
-    console.log(data.data,'data');
-  } else {
-    console.log("erro")
-  }
-  
-  return {
-    props: {
-      players: players ? players : null,
-      message: "success!"
-    }
-  }
-}
-
 const squad:React.FC = (props: any) => {
   const { data: session } = useSession();
   
@@ -49,12 +20,11 @@ const squad:React.FC = (props: any) => {
   useEffect(() => {
     // console.log(useTeamRed.map(i => i) ,'team red');
     // console.log(useTeamBlue.map(i => i) ,'team blue');
-    props?.players.filter((i: any) => useTeamBlue.map((j: any) => j ==! i.name && (
+    players?.filter((i: any) => useTeamBlue.map((j: any) => j ==! i.name && (
       i.name
     )))
-    console.log(props?.players,'all players');
+    console.log(players,'all players');
   },[useTeamRed, useTeamBlue])
-
 
   // useEffect(() => {
   //   if(!session?.user) {
@@ -64,6 +34,24 @@ const squad:React.FC = (props: any) => {
   //   }
   // },[redirect, router, session])
 
+  const [players,setPlayers] = useState<any | null>(null);
+  const fetchDataSquad = async () => {
+    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/players/players`)
+      .then((res) => { 
+        console.log(res.data,'response'),
+        setPlayers(res.data?.data),
+        Promise.resolve(res.data);
+
+        toast.success("Sucesso ao pegar os dados")
+      }).catch((error: Error) => {
+        console.log(error, 'erro'), 
+        Promise.reject(error),
+        toast.error(getError(error.message)
+      )});
+  }
+  useEffect(() => {
+    fetchDataSquad();
+  },[])
 
   return (
     <div className='flex justify-center items-center flex-col'>
@@ -86,7 +74,7 @@ const squad:React.FC = (props: any) => {
             id="teamRed" 
             className='p-3 rounded-lg bg-blue-500 w-100'
           >
-            {props?.players?.map((player: any) => (
+            {players?.map((player: any) => (
               <option key={player._id} value={player.name} className='p-3'>
                 { player.name }
               </option>
@@ -106,7 +94,7 @@ const squad:React.FC = (props: any) => {
             id="teamBlue" 
             className='p-3 rounded-lg bg-red-500 w-100'
           >
-            {props?.players?.map((i: any) => (
+            {players?.map((i: any) => (
               <option key={i._id} value={i.name} className='p-3'>
                 { i.name }
               </option>
