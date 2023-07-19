@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
 import axios from 'axios';
 
@@ -11,9 +11,9 @@ import { toast } from 'react-toastify'
 
 import Header from '@/components/Header'
 
-export const getServerSideProps:GetServerSideProps = async (ctx: any) => {
+export const getServerSideProps:GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
   let news;
-  await axios.get(`${window.location.href}/api/news/news`)
+  await axios.get(`${process.env.REACT_API_URL}/api/news/news`)
     .then((res) => { 
       news = res.data?.data, 
       Promise.resolve(res.data);

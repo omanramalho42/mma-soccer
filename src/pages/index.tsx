@@ -8,8 +8,7 @@ import { useRouter } from "next/router"
 
 import Header from "@/components/Header"
 
-import { GetServerSideProps } from "next"
-
+import { GetServerSideProps, GetServerSidePropsContext } from "next"
 import { toast } from "react-toastify"
 
 import { getError } from "@/utils/getError"
@@ -18,9 +17,14 @@ import Link from "next/link"
 import PLAYERIMG from '../assets/player.png';
 import Image from "next/image"
 
-export const getServerSideProps:GetServerSideProps = async (ctx: any) => {
+interface Props {
+  currentApiUrl: string;
+}
+
+export const getServerSideProps:GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
   let players;
-  await axios.get(`${window.location.href}/api/players/players`)
+
+  await axios.get(`${process.env.REACT_API_URL}/api/players/players`)
     .then((res) => { 
       players = res.data?.data, 
       Promise.resolve(res.data);
@@ -50,6 +54,8 @@ export default function Home(props: any) {
       router.push(redirect || "/login");
     }
   },[session, redirect, router]);
+
+  console.log(process.env.NEXTAUTH_URL,'next url api');
 
   return (
    <main className="">
