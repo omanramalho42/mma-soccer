@@ -15,7 +15,7 @@ const Player:FC<any> = (props) => {
 
   const [player,setPlayer] = useState<null | any>(null);
   const fetchPlayerId = async () => {
-    await axios.get(`/api/players/player?playerId=${playerId}`)
+    await axios.get(`${process.env.API_URL}/api/players/player?playerId=${playerId}`)
     .then((res) => { 
       setPlayer(res.data.data) 
       Promise.resolve(res.data);

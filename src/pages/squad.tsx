@@ -36,7 +36,7 @@ const squad:React.FC = (props: any) => {
 
   const [players,setPlayers] = useState<any | null>(null);
   const fetchDataSquad = async () => {
-    await axios.get(`/api/players/players`)
+    await axios.get(`${process.env.API_URL}/api/players/players`)
       .then((res) => { 
         console.log(res.data,'response'),
         setPlayers(res.data?.data),
