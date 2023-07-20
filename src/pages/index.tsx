@@ -1,3 +1,5 @@
+export const revalidate = 3600;  // revalidate every hour
+
 import { useEffect, useState } from "react"
 
 import axios from 'axios'
@@ -8,7 +10,6 @@ import { useRouter } from "next/router"
 
 import Header from "@/components/Header"
 
-import { GetServerSideProps, GetServerSidePropsContext } from "next"
 import { toast } from "react-toastify"
 
 import { getError } from "@/utils/getError"
@@ -16,6 +17,8 @@ import { getError } from "@/utils/getError"
 import Link from "next/link"
 import PLAYERIMG from '../assets/player.png';
 import Image from "next/image"
+
+import useSWR from 'swr';
 
 export default function Home() {
   const { data: session } = useSession();
@@ -28,59 +31,35 @@ export default function Home() {
     }
   },[session, redirect, router]);
 
-  const[players,setPlayers] = useState<any | null>(null);
-  const[loading,setLoading] = useState(true);
-
   const fetchDataPlayers = async () => {
-    await axios.get(`/api/players/players`)
-    .then((res) => { 
-      setPlayers(res.data?.data);
-      Promise.resolve(res.data);
-      
-      toast.success("Sucesso ao pegar os dados");
-      setLoading(false);
+    const response: any = await axios.get(`/api/players/players`)
+    .then((res) => {
+        // Promise.resolve(res.data);
+        toast.success("Sucesso ao pegar os dados");
+        return res.data.data
     }).catch((error: Error) => {
       // Promise.reject(error),
-      setLoading(true),
       toast.error(getError(error.message),
     )});
+    
+    return response;
+  }  
+
+  const { data, error } = useSWR('data', fetchDataPlayers, { revalidateOnFocus: false });
+  if(error) {
+    <div>
+      Erro ao buscar dados.
+    </div>
+  }
+  if(!data) {
+    <div>
+      Carregando...
+    </div>
   }
 
-  useEffect(() => {
-    fetchDataPlayers();
-  },[]);
-
-  useEffect(() => { console.log(players,'players') },[players])
-
   return (
-   <main className="">
+    <main className="">
     <Header />
-
-    {/* <div className="flex-1 flex-col justify-center items-center flex bg-[url('../assets/bg.jpeg')] bg-no-repeat bg-cover h-[100vh] w-[100%]">
-      <div className="flex top-28 font-bold bg-transparent ufc__font tracking-widest flex-col space-y-12 flex-1 justify-center items-center">
-        <h1 className="text-8xl uppercase font-extrabold text-yellow-500 text-center">
-          MMA SOCCER
-        </h1>
-        <h2 className="text-6xl text-green-500">
-          FERNANDO X CLEITON
-        </h2>
-        <h4 className="tracking-wide text-white">
-          SEGUNDA E QUINTA DAS 19 AS 21 HORAS HORARIO DE BRASILIA
-        </h4>
-        <div className="flex flex-row space-x-12">
-          <button className="p-6 shadow-lg rounded-md hover:scale-110 transition-all bg-gray-100 text-center text-lg text-black">
-            CARD COMPLETO
-          </button>
-          <button className="p-6 shadow-lg rounded-md hover:scale-110 transition-all bg-gray-100 text-center text-lg text-black"> 
-            SEJA UM MENSALISTA
-          </button>
-        </div>
-        <h5 className="text-white">
-          Assita a todos os eventos
-        </h5>
-      </div>
-
-    </div> */}
 
     <div className="flex justify-center mx-auto flex-col h-full my-24 lg:mx-40 sm:mx-24">
 
@@ -112,7 +91,7 @@ export default function Home() {
 
       <div className="flex space-x-2 flex-row mt-10 max-w-8xl overflow-x-auto px-10 h-[600px] flex-nowrap">
         <div className="flex transition-all items-center justify-center">
-          {players?.map((i: any, idx: number) => players ? (
+          {data?.map((i: any, idx: number) => data ? (
             <div 
               key={i._id} 
               className={`flex-1 bg-no-repeat w-[400px] h-[470px] hover:scale-110 transition-all object-fill bg-[url('../assets/cardbg.png')] flex-col items-center flex justify-around`}
