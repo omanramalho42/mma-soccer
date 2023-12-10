@@ -1,7 +1,12 @@
 import Header from '@/components/Header';
 import React, { useState } from 'react';
+import Image from 'next/image';
+import CRISAO from '../assets/crisao.png'
+import WeatherComponent from '@/components/WeatherComponent';
 
 const Calendar = () => {
+  const apiKey = '0e9c5e5e4b7d5aa5f6eb48bd40dd6031'; // Substitua pela sua chave de API
+
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -25,6 +30,8 @@ const Calendar = () => {
     const blanks = Array(firstDayOfMonth).fill(null);
     const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
+    const preSelectedDates:any = { 18: true}; // Adicione as datas desejadas
+
     return (
       <div className="grid bg-white grid-cols-7 gap-1">
         {daysOfWeek.map((day) => (
@@ -40,7 +47,7 @@ const Calendar = () => {
             key={day}
             className={`text-center p-2 cursor-pointer ${
               selectedDate.getDate() === day ? 'bg-blue-500 text-white' : ''
-            }`}
+            } ${preSelectedDates[day] ? 'bg-yellow-300' : ''}`}
             onClick={() => handleDateClick(day)}
           >
             {day}
@@ -61,7 +68,7 @@ const Calendar = () => {
               setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1))
             }
           >
-            Previous Month
+            Mês anterior
           </button>
           <div className="font-bold text-lg">
             {new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(
@@ -74,10 +81,15 @@ const Calendar = () => {
               setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1))
             }
           >
-            Next Month
+            Próximo mês
           </button>
         </div>
         {renderCalendar()}
+      </div>
+      
+      <div className='flex justify-start mx-5'>
+        <WeatherComponent city="london" apiKey={apiKey} />
+        <Image src={CRISAO} alt='' height={300}/>
       </div>
     </div>
   );

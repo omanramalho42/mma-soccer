@@ -15,8 +15,24 @@ import { toast } from "react-toastify"
 import { getError } from "@/utils/getError"
 
 import Link from "next/link"
-// import PLAYERIMG from '../assets/player.png';
+import PLAYERIMG from '../assets/player.png';
 import AVATARIMG from '../assets/player2.png';
+import AVATARIMG2 from '../assets/oman.png';
+import AVATARIMG3 from '../assets/cleiton.png';
+import AVATARIMG4 from '../assets/junior.png';
+import AVATARIMG5 from '../assets/crisao.png';
+import DADA from '../assets/dada.png';
+import OMAN from '../assets/omsn.png';
+import AVATAR5 from '../assets/jr.png'
+
+const images = [
+  PLAYERIMG,
+  AVATARIMG,
+  AVATARIMG5,
+  AVATARIMG3,
+  DADA
+]
+
 import Image from "next/image"
 
 import useSWR from 'swr';
@@ -106,7 +122,8 @@ export default function Home() {
 
               <Link href={`/player/${i._id}`} className="z-1" tabIndex={-1} aria-checked={false}>
                 <Image 
-                  src={AVATARIMG} 
+                  src={images[idx]} 
+                  height={300}
                   className="h-full w-full bottom-[6em] right-3 relative" 
                   width={250}
                   alt="player"

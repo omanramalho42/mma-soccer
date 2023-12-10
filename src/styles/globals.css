@@ -12,6 +12,7 @@ body {
   background-image: url('../assets/post4.jpeg');
 
   background: radial-gradient(#FFD700, rgb(249, 162, 22));
+  /* background: radial-gradient(#02c809, rgb(15, 228, 29)); */
   /* background: radial-gradient(#347bff, #3f16af); */
   
   /* background-size: contain;
