@@ -5,15 +5,15 @@ const Calendar = () => {
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const getDaysInMonth = (year, month) => {
+  const getDaysInMonth = (year: any, month: any) => {
     return new Date(year, month + 1, 0).getDate();
   };
 
-  const getFirstDayOfMonth = (year, month) => {
+  const getFirstDayOfMonth = (year: any, month: any) => {
     return new Date(year, month, 1).getDay();
   };
 
-  const handleDateClick = (day) => {
+  const handleDateClick = (day: any) => {
     setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), day));
   };
 
