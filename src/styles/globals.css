@@ -9,7 +9,13 @@
 }
 
 body {
-  background: radial-gradient(#347bff, #3f16af);
+  background-image: url('../assets/post4.jpeg');
+
+  background: radial-gradient(#FFD700, rgb(249, 162, 22));
+  /* background: radial-gradient(#347bff, #3f16af); */
+  
+  /* background-size: contain;
+  background-repeat: no-repeat; */
 }
 
 .ufc__font {

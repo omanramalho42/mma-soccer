@@ -15,7 +15,8 @@ import { toast } from "react-toastify"
 import { getError } from "@/utils/getError"
 
 import Link from "next/link"
-import PLAYERIMG from '../assets/player.png';
+// import PLAYERIMG from '../assets/player.png';
+import AVATARIMG from '../assets/player2.png';
 import Image from "next/image"
 
 import useSWR from 'swr';
@@ -58,29 +59,29 @@ export default function Home() {
   }
 
   return (
-    <main className="">
+    <main className="flex-1 w-full">
     <Header />
 
-    <div className="flex justify-center mx-auto flex-col h-full my-24 lg:mx-40 sm:mx-24">
+    <div className="w-full flex flex-col h-full my-20">
 
-      <div className="flex items-center w-full justify-between">
+      <div className="flex mx-5 lg:mx-20 md:mx-15 items-center justify-between">
         
-        <div className="flex flex-nowrap space-x-2 items-center">
-          <button className="flex p-2 bg-gray-100 opacity-60 hover:bg-white hover:text-blue-600 hover:opacity-100 rounded-full">
+        <div className="flex flex-wrap items-center">
+          <button className="flex p-2 bg-gray-100 opacity-60 mx-2 hover:bg-white hover:text-blue-600 hover:opacity-100 rounded-full">
             <p className="uppercase mx-2">
-              players
+              jogadores
             </p>
           </button>
-          <button className="flex p-2 bg-gray-100 opacity-60 hover:bg-white hover:text-blue-600 hover:opacity-100 rounded-full">
+          {/* <button disabled className="flex p-2 bg-gray-100 mx-2 my-2 opacity-60 hover:bg-white hover:text-blue-600 hover:opacity-100 rounded-full">
             <p className="uppercase mx-2">
-              management
+              associados
             </p>
-          </button>
+          </button> */}
         </div>
 
-        <div className="d-flex justify-between space-x-4 space-y-2">
-          {["attack", "goleiro","defesa","lateral"].map(i => (
-            <button key={i} className="p-2 bg-gray-100 opacity-60 hover:opacity-100 hover:bg-white hover:text-blue-600 rounded-full">
+        <div className="d-flex">
+          {["ataque", "goleiro","defesa","lateral"].map(i => (
+            <button key={i} className="p-2 mx-2 my-2 bg-gray-100 opacity-60 hover:opacity-100 hover:bg-white hover:text-blue-600 rounded-full">
               <p className="uppercase mx-2">
                 { i }
               </p>
@@ -89,7 +90,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex space-x-2 flex-row mt-10 max-w-8xl overflow-x-auto px-10 h-[600px] flex-nowrap">
+      <div className="flex space-x-2 flex-row mt-10 max-w-8xl overflow-x-auto px-10 h-[800px] flex-nowrap">
         <div className="flex transition-all items-center justify-center">
           {data?.map((i: any, idx: number) => data ? (
             <div 
@@ -99,20 +100,20 @@ export default function Home() {
             >
               <span className="p-5 bg-blue-300 rounded-full relative top-[8.2em] shadow-full left-5 z-2">
                 <p className="uppercase z-[10] font-bold text-6xl relative text-white">
-                  10
+                  { idx }
                 </p>
               </span>
 
               <Link href={`/player/${i._id}`} className="z-1" tabIndex={-1} aria-checked={false}>
                 <Image 
-                  src={PLAYERIMG} 
+                  src={AVATARIMG} 
                   className="h-full w-full bottom-[6em] right-3 relative" 
                   width={250}
                   alt="player"
                 />
               </Link>
               <div className="flex flex-col space-y-4 text-white ufc__font relative bottom-[9em] right-[2em]">
-                {i.name ? (
+                { i.name ? (
                   <p className="text-5xl text-center">
                     { i.name }
                   </p>

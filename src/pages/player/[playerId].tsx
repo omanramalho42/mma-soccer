@@ -26,9 +26,26 @@ const Player:FC<any> = (props) => {
       toast.error(getError(error.message)
     )});
   }
+  
+  const [players, setPlayers] = useState();
+  const fetchPlayers = async () => {
+    await axios.get(`${process.env.API_URL}/api/players/`)
+    .then((res) => { 
+      setPlayers(res.data.data) 
+      Promise.resolve(res.data);
+
+      toast.success("Sucesso ao pegar os jogadores")
+    }).catch((error: Error) => {
+      // Promise.reject(error),
+      toast.error(getError(error.message)
+    )});
+  }
 
   useEffect(() => {
     fetchPlayerId();
+    fetchPlayers();
+
+    console.log(players,'players');
   }, [router, playerId])
   
   return (
@@ -49,14 +66,22 @@ const Player:FC<any> = (props) => {
 
       <div className='flex lg:flex-row space-x-4 flex-col mt-20 justify-around items-center space-y-4'>
         
-        <div className=''>
-          <div className='flex flex-col items-start'>
+        <div className='w-full'>
+          <div className='flex mx-5 flex-col items-start'>
             
-            <span className='p-2 rounded-md bg-blue-700'>
-              <p className='uppercase mx-4 text-bold text-white'>
-                {player?.positionPlayer}
-              </p>
-            </span>
+            <div className='flex flex-row justify-between items-center space-x-4'>
+              <span className='p-2 rounded-md bg-blue-700'>
+                <p className='uppercase mx-4 text-bold text-white'>
+                  {player?.positionPlayer}
+                </p>
+              </span>
+
+              <span className='p-2 rounded-md bg-purple-700'>
+                <p className='uppercase mx-4 text-bold text-white'>
+                  🔰 frança
+                </p>
+              </span>
+            </div>
 
             <h1 className='text-7xl text-white font-bold'>
               {player?.fullName}
@@ -102,7 +127,7 @@ const Player:FC<any> = (props) => {
           </div>
         </div>
 
-        <div className=''>
+        <div className='w-full flex flex-row items-end'>
           <Image 
             width={300} 
             height={800} 
@@ -110,6 +135,34 @@ const Player:FC<any> = (props) => {
             alt='player' 
             src={PLAYERIMG} 
           />
+          <div className='flex flex-col mx-10 items-center my-20'>
+            
+            <div className='flex flex-col my-40 justify-center space-y-5'>
+              <p className='rounded-full w-10 text-white bg-gray-400 items-center p-2 text-center'>{'>'}</p>
+              <p className='rounded-full w-10 text-white bg-gray-400 items-center p-2 text-center'>{'<'}</p>
+            </div>
+
+            <div className='flex flex-col justify-center items-center space-y-2 mt-10'>
+              <div className='flex justify-center rounded-full p-10' style={{ border: '2px solid white' }}>
+                <p className='text-white text-md font-bold'>
+                  36%
+                </p>
+              </div>
+              <p className='text-white'>
+                Rating
+              </p>
+            </div>
+            <div className='flex flex-col justify-center items-center space-y-2 mt-10'>
+              <div className='flex justify-center rounded-full p-10' style={{ border: '2px solid white' }}>
+                <p className='text-white text-md font-bold'>
+                  36%
+                </p>
+              </div>
+              <p className='text-white'>
+                Shooting
+              </p>
+            </div>
+          </div>
         </div>
 
       </div>

@@ -11,6 +11,18 @@ import { toast } from 'react-toastify'
 
 import Header from '@/components/Header'
 
+import IMAGEPOST from '../../assets/post4.jpeg'
+import IMAGEPOST2 from '../../assets/bg.jpeg'
+import IMAGEPOST3 from '../../assets/post5.jpeg'
+
+import Image from 'next/image';
+
+const IMAGES = [
+  IMAGEPOST,
+  IMAGEPOST2,
+  IMAGEPOST3
+]
+
 const news = (props: any) => {
   const { data: session } = useSession();
   
@@ -54,33 +66,35 @@ const news = (props: any) => {
   },[carouselIdx]);
 
   return (
-    <div>
+    <div className=''>
       <Header />
       {news ? (
-        <div className='mt-10'>
-          {news?.map((post: any) => (
-            <div key={post._id} className='space-y-10 border-2 border-gray-900 my-10 justify-center flex flex-col items-center'>
-              <h1 className='text-xl font-bold'>
+        <div className='grid grid-cols-3 gap-5 mx-20 mt-5 w-25'>
+          {news?.map((post: any, idx:number) => (
+            <div key={post._id} className='space-y-4 border-2 border-gray-50 my-10 justify-center flex flex-col items-center'>
+              <h1 className='text-3xl uppercase font-bold text-gray-900'>
                 { post.title }
               </h1>
-              <p>{post.author.toString()}</p>
-              <h2>
+              {/* <p>{post.author.toString()}</p> */}
+              <h2 className='text-xl font-medium text-gray-900'>
                 { post.subtitle }
               </h2>
-              <h3>
+              {/* <h3>
                 { post.slug }
-              </h3>
-              <h4>
-                { post.description }
-              </h4>
-              <p>
-                {post.content}
-              </p>
-              <span>
+              </h3> */}
+              <div className='mx-5'>
+                <p className='text-left text-gray-900'>
+                  { post.description }
+                </p>
+                <p className='text-left text-gray-900'>
+                  {post.content}
+                </p>
+              </div>
+              {/* <span>
                 {post.category}
-              </span>
-              <p>{post.playerRef.toString()}</p>
-              <img src={post.featuredImage || ""} alt={post.title} />
+              </span> */}
+              {/* <p>{post.playerRef.toString()}</p> */}
+              <Image src={post.featuredImage || IMAGES[idx] } alt={post.title} height={300} />
 
               <div className='flex w-full justify-center items-center'>
                 {/* {post.carousel && post.carousel.map((src: string,idx: number) => ( */}
@@ -94,7 +108,7 @@ const news = (props: any) => {
                     >
                       {"<"}
                     </button>
-                    <img src={carousel[carouselIdx]} alt={carousel[carouselIdx]} />
+                    {/* <img src={carousel[carouselIdx]} alt={carousel[carouselIdx]} /> */}
                     <button 
                       type='button'
                       className='relative p-4 text-xl' 
@@ -118,7 +132,7 @@ const news = (props: any) => {
                 </div>
               ))}
 
-              <span>
+              <span className='text-gray-900'>
                 { post.createdAt }
               </span>
 

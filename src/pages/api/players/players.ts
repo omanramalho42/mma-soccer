@@ -1,5 +1,6 @@
 import { User } from "@/models/user";
 import { NextApiRequest, NextApiResponse } from "next"
+
 import db from "@/services/db";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -13,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     .catch(error => 
       console.log(`Erro::${error.message}`)
     );
-
+  console.log("players",players);
   // await db.disconnect();
 
   if(!players) {

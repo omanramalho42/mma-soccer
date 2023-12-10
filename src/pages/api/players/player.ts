@@ -7,7 +7,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const filter = {}
-  const player = await User.findById(req.query.playerId);
+  console.log(req.query.playerId, 'query');
+
+  const player = 
+    await User.findById(
+      req.query.playerId ?? ''
+    );
+
+  console.log(player,"player");
+
+  if(!player) {
+    return res.status(402).send({
+      success: false,
+      data: {}
+    })
+  }
   
   return res.status(201).send({ 
     success: true,

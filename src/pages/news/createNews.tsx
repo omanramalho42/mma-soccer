@@ -383,7 +383,7 @@ const createNews:React.FC = () => {
           />
         </div>
 
-        {/* BUTAO */}
+        {/* BOTAO */}
         <div className='flex space-x-5 flex-row my-5 justify-center items-center'>
           <button type='submit' className='p-4 shadow-full text-white font-bold uppercase rounded-xl text-center hover:scale-110 transition-all bg-purple-700 hover:bg-purple-950'>
             salvar
