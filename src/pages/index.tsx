@@ -49,7 +49,7 @@ export default function Home() {
   },[session, redirect, router]);
 
   const fetchDataPlayers = async () => {
-    const response: any = await axios.get(`/api/players/players`)
+    const response: any = await axios.get(`${process.env.API_URL}/api/players/players`)
     .then((res) => {
         // Promise.resolve(res.data);
         toast.success("Sucesso ao pegar os dados");
