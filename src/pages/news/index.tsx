@@ -33,7 +33,7 @@ const news = (props: any) => {
   const [carousel, setCarousel] = useState<string[]>([]);
 
   const fetchNews = async () => {
-    await axios.get(`${process.env.API_URL}/api/news/news`)
+    await axios.get('/api/news/news')
     .then((res) => { 
       setNews(res.data?.data), 
       Promise.resolve(res.data);
